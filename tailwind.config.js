@@ -20,13 +20,48 @@ export default {
       fontFamily: {
         palanquin: ['Palanquin', 'sans-serif'],
         montserrat: ['Montserrat', 'sans-serif'],
+        'body': [
+          'Inter', 
+          'ui-sans-serif', 
+          'system-ui', 
+          '-apple-system', 
+          'system-ui', 
+          'Segoe UI', 
+          'Roboto', 
+          'Helvetica Neue', 
+          'Arial', 
+          'Noto Sans', 
+          'sans-serif', 
+          'Apple Color Emoji', 
+          'Segoe UI Emoji', 
+          'Segoe UI Symbol', 
+          'Noto Color Emoji'
+        ],
+            'sans': [
+          'Inter', 
+          'ui-sans-serif', 
+          'system-ui', 
+          '-apple-system', 
+          'system-ui', 
+          'Segoe UI', 
+          'Roboto', 
+          'Helvetica Neue', 
+          'Arial', 
+          'Noto Sans', 
+          'sans-serif', 
+          'Apple Color Emoji', 
+          'Segoe UI Emoji', 
+          'Segoe UI Symbol', 
+          'Noto Color Emoji'
+        ]
       },
       colors: {
         'primary': "#ECEEFF",
         "coral-red": "#FF6452",
         "slate-gray": "#6D6D6D",
         "pale-blue": "#F5F6FF",
-        "white-400": "rgba(255, 255, 255, 0.80)"
+        "white-400": "rgba(255, 255, 255, 0.80)",
+        primary: {"50":"#f8fafc","100":"#f1f5f9","200":"#e2e8f0","300":"#cbd5e1","400":"#94a3b8","500":"#64748b","600":"#475569","700":"#334155","800":"#1e293b","900":"#0f172a","950":"#020617"}
       },
       boxShadow: {
         '3xl': '0 10px 40px rgba(0, 0, 0, 0.1)'

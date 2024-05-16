@@ -11,9 +11,10 @@ import {LoginUser} from "../redux/userSlice"
 import { fetchProducts } from '../redux/productsSlice';
 import { Link,useNavigate } from 'react-router-dom';
 import { fetchAllUsers } from '../redux/adminUsersFetch';
-import { fetchCart } from '../redux/cartSlice';
+import { fetchCart, fetchCartItems } from '../redux/cartSlice';
 import { fetchOrders } from '../redux/ordersSlice';
 import logo_no_background from "../assets/logo/logo_no_background.png";
+import { fetchUserOrders } from '../redux/userOrdersSlice';
 
 const backgroundImageUrl = 'https://images.unsplash.com/photo-1606660265514-358ebbadc80d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1575&q=80';
 
@@ -48,35 +49,42 @@ const LoginPage = () => {
             console.log(userData);
             dispatch(LoginUser({
                 userData,
-            }))
+            }));
+            
+            dispatch(fetchCartItems(userIdToFind));
             dispatch(fetchProducts());
             dispatch(fetchAllUsers());
-            dispatch(fetchOrders());
+            dispatch(fetchUserOrders(userIdToFind));
+            // dispatch(fetchOrders());
             navigate("/");
         }
         else{
             const userData = {
+                Address:[],
                 uid: userCredential.user.uid,
                 username: userCredential.user.displayName || 'New User',
                 email: userCredential.user.email,
                 profileImage:userCredential.user.photoURL,
+                date:new Date().toLocaleString("en-US", {
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric",
+                  }),
               };
             const cartData = {
-                uid: userCredential.user.uid,
-                products : []
+                cartItems : []
             }
-            const orderData = {
-                uid:userCredential.user.uid,
-                products :[]
+            const orderData  = {
+                orders :[]
             }
 
-            const userRef = doc(collection(getFirestore(), 'users'), userData.uid);
+            const userRef = doc(collection(getFirestore(), 'users'), userCredential.user.uid);
             await setDoc(userRef, userData);
 
-            const cartRef = doc(collection(getFirestore(), 'cart'), cartData.uid);
+            const cartRef = doc(collection(getFirestore(), 'cart'), userCredential.user.uid);
             await setDoc(cartRef, cartData);
 
-            const orderRef = doc(collection(getFirestore(),'orders'),orderData.uid)
+            const orderRef = doc(collection(getFirestore(),'orders_for_individual_users'),userCredential.user.uid)
             await setDoc(orderRef,orderData);
 
             dispatch(LoginUser({

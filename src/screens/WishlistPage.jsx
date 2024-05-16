@@ -1,9 +1,13 @@
 import React from 'react'
 import Navbar from '../components/Navbar';
 import PopularProductCard from '../components/PopularProductCard';
+import { useSelector } from 'react-redux';
+import { getProducts } from '../redux/productsSlice';
 
 
 const WishlistPage = () => {
+  const temp = useSelector(getProducts);
+  const products = temp.items;
   return (
     <>
         <section>
@@ -16,21 +20,7 @@ const WishlistPage = () => {
       </h2>
     </div>
     <div className="grid grid-cols-4">
-      <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
+    { products.map((product,index)=><PopularProductCard pr={product} key={index}/>)}
     </div>
   </section>
     </>

@@ -17,6 +17,7 @@ import { auth, googleProvider } from "../config/firebase";
 import {useDispatch,useSelector} from "react-redux";
 import { LogoutUser, setUser } from '../redux/userSlice';
 import logo_no_background from "../assets/logo/logo_no_background.png";
+import { getCartItems } from '../redux/cartSlice';
 
 
 
@@ -65,6 +66,8 @@ const isLoggedIn = true;
 const Navbar = () => {
 
   const user = useSelector(setUser);
+  const cartItems = useSelector(getCartItems);
+
 
   const dispatch = useDispatch();
 
@@ -200,7 +203,7 @@ const Navbar = () => {
               {/* <Link to="/admin">admin</Link> */}
 
               <IconButton aria-label="cart m-4" className="hover:bg-slate-100">
-                <StyledBadge badgeContent={0} color="secondary">
+                <StyledBadge badgeContent={cartItems.length} color="secondary">
                   <Link to="/cart"><ShoppingCartOutlinedIcon sx={{ color: green[300], fontSize: 29 }}/></Link>
                 </StyledBadge>
               </IconButton>
@@ -245,7 +248,7 @@ const Navbar = () => {
                       <Menu.Item>
                         {({ active }) => (
                           <Link
-                          to="/admin"
+                          to="/admin/dashboard"
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >
                             Admin panel

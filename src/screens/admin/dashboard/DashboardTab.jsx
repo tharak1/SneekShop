@@ -56,19 +56,19 @@ function DashboardTab() {
                     <Tabs defaultIndex={0} className=" " >
                         <TabList className="md:flex md:space-x-8 bg-  grid grid-cols-2 text-center gap-4   md:justify-center mb-10 ">
                             <Tab>
-                                <button type="button" className="font-medium border-b-2 hover:shadow-purple-700 border-purple-500 text-purple-500 rounded-lg text-xl shadow-[inset_0_0_8px_rgba(0,0,0,0.6)]  px-5 py-1.5 text-center bg-[#605d5d12] ">
+                                <button type="button" className="font-medium border-b-2  rounded-lg text-xl   px-5 py-1.5 text-center bg-[#605d5d12] ">
                                     <div className="flex gap-2 items-center">
                                         <MdOutlineProductionQuantityLimits />Products</div> </button>
                             </Tab>
                             <Tab>
-                                <button type="button" className="font-medium border-b-2 border-pink-500 bg-[#605d5d12] text-pink-500  hover:shadow-pink-700  rounded-lg text-xl shadow-[inset_0_0_8px_rgba(0,0,0,0.6)]    px-5 py-1.5 text-center ">
+                                <button type="button" className="font-medium border-b-2   rounded-lg text-xl     px-5 py-1.5 text-center ">
                                     <div className="flex gap-2 items-center">
                                         <AiFillShopping /> Order
                                     </div>
                                 </button>
                             </Tab>
                             <Tab>
-                                <button type="button" className="font-medium border-b-2 border-green-500 bg-[#605d5d12] text-green-500 rounded-lg text-xl  hover:shadow-green-700 shadow-[inset_0_0_8px_rgba(0,0,0,0.6)]   px-5 py-1.5 text-center ">
+                                <button type="button" className="font-medium border-b-2  text-xl  hover:shadow-green-700    px-5 py-1.5 text-center ">
                                     <div className="flex gap-2 items-center">
                                         <FaUser /> Users
                                     </div>
@@ -89,7 +89,7 @@ function DashboardTab() {
                                 </div>
                                 <div className="relative overflow-x-auto ">
                                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400  ">
-                                        <thead className="text-xs border border-gray-600 text-black uppercase bg-gray-200 shadow-[inset_0_0_8px_rgba(0,0,0,0.6)]" style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
+                                        <thead className="text-xs text-black uppercase bg-gray-200 " style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
                                             <tr>
                                                 <th scope="col" className="px-6 py-3">
                                                     S.No
@@ -115,7 +115,8 @@ function DashboardTab() {
                                             </tr>
                                         </thead>
                                         {product.map((item, index) => {
-                                            const { title, price, imageUrl, category, description, date } = item;
+                                            const { title, price, CoverimageUrl, category, description, date } = item;
+                                     
                                             return (
                                                 <tbody className=''>
                                                     <tr className="bg-gray-50 border-b  dark:border-gray-700" style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
@@ -123,7 +124,7 @@ function DashboardTab() {
                                                             {index + 1}.
                                                         </td>
                                                         <th scope="row" className="px-6 py-4 font-medium text-black whitespace-nowrap">
-                                                            <img className='w-16' src={imageUrl} alt="img" />
+                                                            <img className='w-16' src={CoverimageUrl} alt="img" />
                                                         </th>
                                                         <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
                                                             {title}
@@ -136,7 +137,7 @@ function DashboardTab() {
                                                         </td>
                                                         <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
                                                             {date}
-                                                        </td>
+                                                        </td> 
                                                         <td className="px-6 py-4">
                                                             <div className=" flex gap-2">
                                                                 <div className=" flex gap-2 cursor-pointer text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
@@ -172,10 +173,8 @@ function DashboardTab() {
                             {/* <Order order={order} setOrder={setOrder} setLoading={setLoading} /> */}
                             <div className="relative overflow-x-auto mb-16">
                                 <h1 className=' text-center mb-5 text-3xl font-semibold underline' style={{ color: mode === 'dark' ? 'white' : '' }}>Order Details</h1>
-
-                                {order.map((allorder,index)=>{
-                                    return(<table className="w-full text-sm text-left text-gray-500 dark:text-gray-400" >
-                                    <thead className="text-xs text-black uppercase bg-gray-200 " style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
+                                <table className="w-full text-sm text-left " >
+                                            <thead className="text-xs text-black uppercase bg-gray-200 " style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
                                         <tr>
                                             <th scope="col" className="px-6 py-3">
                                                 Payment Id
@@ -212,7 +211,10 @@ function DashboardTab() {
                                             </th>
                                         </tr>
                                     </thead>
-                                    {allorder.cartItems.map((item,index)=>{
+                                {order.map((allorder,index)=>{
+                                    return(
+                                    
+                                    allorder.cartItems.map((item,index)=>{
                                         // console.log(allorder)
                                         const {title,description,category,imageUrl,price} = item;
                                         return(
@@ -257,9 +259,9 @@ function DashboardTab() {
 
                                     </tbody>
                                         )
-                                    })}
-                                </table>)
+                                    }))
                                 })}
+                                </table>
                             </div>
                         </TabPanel>
 

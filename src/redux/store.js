@@ -1,9 +1,10 @@
 import {configureStore} from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
-import cartReducer from "./cartSlice";
+import cartItemsReducer from "./cartSlice";
 import productsReducer from "./productsSlice"
 import adminUsersFetchReducer from "./adminUsersFetch";
 import ordersReducer from "./ordersSlice";
+import UserOrdersReducer from './userOrdersSlice';
 
 import storage from "redux-persist/lib/storage";
 import {persistReducer} from "redux-persist";
@@ -18,10 +19,11 @@ const persistConfig = {
 
 const reducer = combineReducers({
     user:userReducer,
-    cart:cartReducer,
+    cartItems:cartItemsReducer,
     products:productsReducer,
     adminUsers:adminUsersFetchReducer,
-    orders:ordersReducer
+    orders:ordersReducer,
+    UserOrders:UserOrdersReducer
 });
 
 const persistedReducer = persistReducer(persistConfig,reducer);

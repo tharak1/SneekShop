@@ -5,6 +5,8 @@ import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import PopularProductCard from "../components/PopularProductCard.jsx"
+import { useSelector } from 'react-redux';
+import { getProducts } from '../redux/productsSlice.js';
 
 
 const sortOptions = [
@@ -65,14 +67,16 @@ function classNames(...classes) {
 
 
 const ShoppingPage = () => {
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const temp = useSelector(getProducts);
+  const products = temp.items;
   return (
     <>
         <section>
             <Navbar/>
         </section>
-        <div className="bg-white">
-      <div>
+
+      <div className="grid grid-cols-12 h-screen grid-rows-12">
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
           <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
@@ -173,8 +177,7 @@ const ShoppingPage = () => {
           </Dialog>
         </Transition.Root>
 
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
+          <div className="flex items-baseline justify-between border-b border-gray-200 pb-4 pt-24 px-20 col-span-12 row-span-2  fixed w-screen">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
 
             <div className="flex items-center">
@@ -236,12 +239,8 @@ const ShoppingPage = () => {
             </div>
           </div>
 
-          <section aria-labelledby="products-heading" className="pb-24 pt-6">
-            <h2 id="products-heading" className="sr-only">
-              Products
-            </h2>
 
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+            <div className="col-span-2 row-start-4 row-span-10 overflow-auto p-5">
               {/* Filters */}
               <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
@@ -296,32 +295,18 @@ const ShoppingPage = () => {
                   </Disclosure>
                 ))}
               </form>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-                  <PopularProductCard/>
-
-              
-
-
-              <div className="lg:col-span-3">{/* Your content */}</div>
             </div>
 
-          </section>
-        </main>
+
+
+            <div className='col-start-4 row-start-4 col-span-10 row-span-10 overflow-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-2'>
+              {products.map((product, index) => (
+                <div key={index}>
+                  <PopularProductCard pr={product} className="col-span-1 row-span-4"/>
+                </div>
+              ))}
+            </div>
       </div>
-    </div>
     </>
   );
 }

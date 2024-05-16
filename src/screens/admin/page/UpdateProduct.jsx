@@ -7,7 +7,7 @@ import { updateProductSingle } from '../../../redux/productsSlice';
 
 function UpdateProduct(props) {
     
-    // Extract product data from props.location.state
+    // Extract product data from props.location.state 
     
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);

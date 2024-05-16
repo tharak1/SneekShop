@@ -6,7 +6,7 @@ import { getFirestore, addDoc,collection, where, getDocs, doc,updateDoc, setDoc,
 // const productRef = collection(getFirestore(), "products");
 // Async thunks
 export const fetchOrders = createAsyncThunk(
-  'products/fetchOrders',
+  'orders/fetchOrders',
   async () => {
     const ordersCollection = collection(firestore, 'orders'); // Reference the products collection
     const q = query(ordersCollection); // Create an empty query to fetch all products

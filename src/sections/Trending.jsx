@@ -2,6 +2,11 @@ import React from 'react'
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import PopularProductCard from "../components/PopularProductCard.jsx"
+
+import {useSelector,useDispatch} from 'react-redux';
+import { deleteProduct, getProducts } from '../redux/productsSlice.js';
+// import { products } from '../constants/index.js';
+
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
@@ -25,6 +30,9 @@ const responsive = {
 
 
 const Trending = () => {
+  const temp = useSelector(getProducts);
+  const products = temp.items;
+
   return (
     <section id='products' className='max-container mt-8 xl:pl-10 max-sm:mt-12'>
     <div className='flex flex-col justify-start gap-5'>
@@ -50,12 +58,13 @@ const Trending = () => {
         renderDotsOutside={true}
         itemClass="carousel-item-padding-80-px"
         >
-            <PopularProductCard/>
-            <PopularProductCard/>
+            {/* <PopularProductCard/>
+            <PopularProductCard/> */}
             {/* <PopularProductCard/>
             <PopularProductCard/>
             <PopularProductCard/>
             <PopularProductCard/> */}
+           { products.map((product,index)=><PopularProductCard pr={product} key={index}/>)}
         </Carousel>
     </div>
   </section>

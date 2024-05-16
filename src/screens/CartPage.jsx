@@ -92,7 +92,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Modal from '../components/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteFromCart } from '../redux/cartSlice';
+import { deleteFromCart, getCartItems } from '../redux/cartSlice';
 import { toast } from 'react-toastify';
 import { addDoc, collection } from 'firebase/firestore';
 import { firestore } from '../config/firebase';
@@ -100,6 +100,7 @@ import {useNavigate} from 'react-router-dom';
 // import {useSelector} from "react-redux";
 import { setUser } from '../redux/userSlice';
 import { fetchOrders } from '../redux/ordersSlice';
+import QuantitySelector from '../components/QuantitySelector';
 
 
 function Cart() {
@@ -108,28 +109,24 @@ function Cart() {
   const navigate = useNavigate();
 
   // const context = useContext(myContext)
-  const { mode } = "light";
+  const { mode } = "dark";
 
   const dispatch = useDispatch()
 
-  const cartItems = useSelector((state) => state.cart);
-  console.log(cartItems)
+  const cartItems = useSelector(getCartItems);
 
   const deleteCart = (item) => {
-    dispatch(deleteFromCart(item));
+    // dispatch(deleteFromCart(item));
     toast.success("Delete cart")
   }
 
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-  }, [cartItems])
 
   const [totalAmout, setTotalAmount] = useState(0);
 
   useEffect(() => {
     let temp = 0;
     cartItems.forEach((cartItem) => {
-      temp = temp + parseInt(cartItem.price)
+      temp = temp + (parseInt(cartItem.price)*cartItem.quantity)
     })
     setTotalAmount(temp);
     console.log(temp)
@@ -148,6 +145,11 @@ function Cart() {
   const [address, setAddress] = useState("");
   const [pincode, setPincode] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
+  const [quantityState, setquantityState] = useState(0);
+  const [inCart, setInCart] = useState(false);
+
+
+
 
   const buyNow = async () => {
     if (name === "" || address == "" || pincode == "" || phoneNumber == "") {
@@ -162,6 +164,7 @@ function Cart() {
         theme: "colored",
       })
     }
+
 
     const addressInfo = {
       name,
@@ -184,7 +187,7 @@ function Cart() {
       amount: parseInt(grandTotal * 100),
       currency: "INR",
       order_receipt: 'order_rcptid_' + name,
-      name: "E-Bharat",
+      name: "sneek-shop",
       description: "for testing purpose",
 
       handler:async function (response) {
@@ -234,33 +237,60 @@ function Cart() {
     pay.open();
     console.log(pay);
   }
+
+  const removeItemFromCart = (pId)=>{
+    const userId = user.userData.uid;
+    dispatch(deleteFromCart({ productId: pId, userId}));
+    setInCart(false);
+  }
+
+
+  const gotoPage = () =>{
+    navigate("/orderconfirm?product=cart");
+  }
+
+
+
+
+
   return (
     <>
       <div className="h-screen bg-gray-100 pt-5 mb-[60%] " style={{ backgroundColor: mode === 'dark' ? '#282c34' : '', color: mode === 'dark' ? 'white' : '', }}>
         <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
         <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0 ">
           <div className="rounded-lg md:w-2/3 ">
-            {cartItems.map((item, index) => {
-              const { title, price, description, imageUrl } = item;
-              return (
-                <div className="justify-between mb-6 rounded-lg border  drop-shadow-xl bg-white p-6  sm:flex  sm:justify-start" style={{ backgroundColor: mode === 'dark' ? 'rgb(32 33 34)' : '', color: mode === 'dark' ? 'white' : '', }}>
-                  <img src={imageUrl} alt="product-image" className="w-full rounded-lg sm:w-40" />
-                  <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-                    <div className="mt-5 sm:mt-0">
-                      <h2 className="text-lg font-bold text-gray-900" style={{ color: mode === 'dark' ? 'white' : '' }}>{title}</h2>
-                      <h2 className="text-sm  text-gray-900" style={{ color: mode === 'dark' ? 'white' : '' }}>{description}</h2>
-                      <p className="mt-1 text-xs font-semibold text-gray-700" style={{ color: mode === 'dark' ? 'white' : '' }}>₹{price}</p>
-                    </div>
-                    <div onClick={() => deleteCart(item)} className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                      </svg>
+            
+          {cartItems.length === 0 ? (
+  <p>No items in cart</p>
+) : (
+  cartItems.map((item, index) => {
+    const { productName, price, ProductImage,quantity ,id} = item;
+    return (
 
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
+              <div class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
+          <img src={ProductImage} alt="product" class="w-full  rounded-lg sm:w-40" />
+          <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+            <div class="mt-5 sm:mt-0">
+              <h2 class="text-lg font-bold text-gray-900">{productName}</h2>
+              <p class="text-sm">Price {price} Rs\-</p>
+            </div>
+            <div class="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+              <div class="flex items-center border-gray-100">
+              <QuantitySelector pId = {id} quantity={quantity} setQuantity={setquantityState} setInCart = {setInCart} userId = {user.userData.uid}/>
+              </div>
+              <div class="flex items-center justify-center">
+              <button onClick={()=>{removeItemFromCart(id)}} className="w-full  rounded-md bg-red-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-blue-300">
+              Remove
+            </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    );
+  })
+)}
+
 
           </div>
 
@@ -281,17 +311,7 @@ function Cart() {
               </div>
             </div>
             {/* <Modal  /> */}
-            <Modal
-              name={name}
-              address={address}
-              pincode={pincode}
-              phoneNumber={phoneNumber}
-              setName={setName}
-              setAddress={setAddress}
-              setPincode={setPincode}
-              setPhoneNumber={setPhoneNumber}
-              buyNow={buyNow}
-            />
+            <button className="focus:outline-none w-full text-white bg-violet-600 hover:bg-violet-800 outline-0 font-medium rounded-lg text-sm px-5 py-2.5" onClick={gotoPage}>Checkout</button>
           </div>
         </div>
       </div>
