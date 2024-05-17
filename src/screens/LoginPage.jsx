@@ -15,6 +15,7 @@ import { fetchCart, fetchCartItems } from '../redux/cartSlice';
 import { fetchOrders } from '../redux/ordersSlice';
 import logo_no_background from "../assets/logo/logo_no_background.png";
 import { fetchUserOrders } from '../redux/userOrdersSlice';
+import { Helmet } from 'react-helmet-async';
 
 const backgroundImageUrl = 'https://images.unsplash.com/photo-1606660265514-358ebbadc80d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1575&q=80';
 
@@ -102,6 +103,12 @@ const LoginPage = () => {
 
 
   return (
+    <>
+        <Helmet>
+      <title>login</title>
+      <meta name="description" content="Welcome to home." />
+      <link rel='canonical' href='/login' />
+    </Helmet>
     <div className="flex flex-row w-full h-screen justify-center items-center">
     <div class="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl">
         <div class="hidden bg-cover lg:block lg:w-1/2" style={{ 
@@ -175,7 +182,7 @@ const LoginPage = () => {
 
 
 </div>
-
+</>
 
   );
 }
