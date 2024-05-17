@@ -1,0 +1,2 @@
+https://master--sneekshop.netlify.app/
+https://master--sneekshop.netlify.app/login
